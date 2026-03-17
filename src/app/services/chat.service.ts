@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChatRequest, ChatResponse } from '../models/message.model';
 import { environment } from '../../environments/environment';
@@ -16,18 +16,18 @@ export class ChatService {
   /**
    * Send a message to the chatbot
    * POST /api/chat
+   *
+   * Note: Authorization header is automatically added by AuthInterceptor
    */
   sendMessage(message: string): Observable<ChatResponse> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
     const request: ChatRequest = {
       message,
       conversationId: this.conversationId
     };
 
-    return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, request, { headers });
+    // HttpClient automatically sets Content-Type for JSON
+    // AuthInterceptor automatically adds Authorization: Bearer <token>
+    return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, request);
   }
 
   /**
@@ -47,6 +47,8 @@ export class ChatService {
   /**
    * Clear the conversation (optional endpoint)
    * DELETE /api/chat/:conversationId
+   *
+   * Note: Authorization header is automatically added by AuthInterceptor
    */
   clearConversation(): Observable<void> {
     if (!this.conversationId) {
