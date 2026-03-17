@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { ChatService } from '../services/chat.service';
+import { AuthService } from '../services/auth.service';
 import { Message } from '../models/message.model';
+import { UserInfo } from '../models/auth.model';
 
 @Component({
   selector: 'app-chatbot',
@@ -14,12 +16,22 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
   userInput: string = '';
   isLoading: boolean = false;
   error: string | null = null;
+  userInfo: UserInfo | null = null;
 
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    // Subscribe to user info
+    this.authService.userInfo$.subscribe(info => {
+      this.userInfo = info;
+    });
+
     // Add a welcome message
-    this.addMessage('Hello! How can I help you today?', 'bot');
+    const userName = this.userInfo?.name ? this.userInfo.name : 'there';
+    this.addMessage(`Hello ${userName}! How can I help you today?`, 'bot');
   }
 
   ngAfterViewChecked(): void {
@@ -100,5 +112,9 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

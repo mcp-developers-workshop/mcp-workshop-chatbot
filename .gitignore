@@ -23,3 +23,7 @@ Thumbs.db
 # Environment
 .env
 .env.local
+
+# Environment files (contain OAuth2 credentials)
+src/environments/environment.ts
+src/environments/environment.prod.ts

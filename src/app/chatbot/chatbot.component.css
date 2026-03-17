@@ -18,12 +18,37 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .chatbot-header h2 {
   margin: 0;
   font-size: 24px;
 }
 
-.clear-btn {
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.clear-btn, .logout-btn {
   padding: 8px 16px;
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
@@ -31,15 +56,25 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 14px;
 }
 
-.clear-btn:hover:not(:disabled) {
+.clear-btn:hover:not(:disabled), .logout-btn:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
 .clear-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.logout-btn {
+  background-color: rgba(244, 67, 54, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.logout-btn:hover {
+  background-color: rgba(244, 67, 54, 0.5);
 }
 
 .messages-container {

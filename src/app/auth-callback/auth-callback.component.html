@@ -1,0 +1,18 @@
+<div class="callback-container">
+  <div class="callback-card">
+    <div *ngIf="processing" class="processing">
+      <div class="spinner"></div>
+      <h2>Authenticating...</h2>
+      <p>Please wait while we complete your sign-in</p>
+    </div>
+
+    <div *ngIf="error" class="error">
+      <div class="error-icon">!</div>
+      <h2>Authentication Error</h2>
+      <p>{{ error }}</p>
+      <button class="retry-btn" (click)="retry()">
+        Try Again
+      </button>
+    </div>
+  </div>
+</div>

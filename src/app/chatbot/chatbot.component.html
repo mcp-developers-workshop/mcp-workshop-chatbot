@@ -1,9 +1,19 @@
 <div class="chatbot-container">
   <div class="chatbot-header">
-    <h2>Chatbot</h2>
-    <button class="clear-btn" (click)="clearChat()" [disabled]="isLoading">
-      Clear Chat
-    </button>
+    <div class="header-left">
+      <h2>Chatbot</h2>
+      <div class="user-info" *ngIf="userInfo">
+        <span class="user-name">{{ userInfo.name || userInfo.email }}</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="clear-btn" (click)="clearChat()" [disabled]="isLoading">
+        Clear Chat
+      </button>
+      <button class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    </div>
   </div>
 
   <div class="messages-container" #messagesContainer>
