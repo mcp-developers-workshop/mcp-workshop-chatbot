@@ -181,6 +181,62 @@ export class AuthService {
   }
 
   /**
+   * Get refresh token
+   */
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.refreshTokenKey);
+  }
+
+  /**
+   * Check if token is about to expire (within 60 seconds)
+   */
+  isTokenExpiringSoon(): boolean {
+    const expiry = localStorage.getItem(this.tokenExpiryKey);
+    if (!expiry) {
+      return false;
+    }
+    // Consider token expiring soon if less than 60 seconds remaining
+    return Date.now() > (parseInt(expiry, 10) - 60000);
+  }
+
+  /**
+   * Refresh access token using refresh token
+   */
+  refreshAccessToken(): Observable<boolean> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      return of(false);
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    let body = new HttpParams()
+      .set('grant_type', 'refresh_token')
+      .set('refresh_token', refreshToken)
+      .set('client_id', environment.oauth.clientId);
+
+    if (environment.oauth.clientSecret) {
+      body = body.set('client_secret', environment.oauth.clientSecret);
+    }
+
+    return this.http.post<TokenResponse>(environment.oauth.tokenUrl, body.toString(), { headers }).pipe(
+      tap(response => {
+        this.storeTokens(response);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      map(() => true),
+      catchError(error => {
+        console.error('Token refresh failed:', error);
+        // If refresh fails, logout the user
+        this.logout();
+        return of(false);
+      })
+    );
+  }
+
+  /**
    * Check if user has valid token
    */
   private hasValidToken(): boolean {
