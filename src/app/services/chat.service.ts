@@ -14,7 +14,7 @@ export class ChatService {
 
   /**
    * Send a message to the chatbot
-   * POST /api/chat
+   * POST /api/v1/request
    *
    * Note: Authorization header is automatically added by AuthInterceptor
    */
@@ -25,16 +25,16 @@ export class ChatService {
 
     // HttpClient automatically sets Content-Type for JSON
     // AuthInterceptor automatically adds Authorization: Bearer <token>
-    return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, request);
+    return this.http.post<ChatResponse>(`${this.apiUrl}/request`, request);
   }
 
   /**
    * Clear the conversation (optional endpoint)
-   * DELETE /api/chat
+   * DELETE /api/v1/request
    *
    * Note: Authorization header is automatically added by AuthInterceptor
    */
   clearConversation(): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/chat`);
+    return this.http.delete<void>(`${this.apiUrl}/request`);
   }
 }
