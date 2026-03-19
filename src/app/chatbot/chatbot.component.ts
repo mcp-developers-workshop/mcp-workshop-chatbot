@@ -29,9 +29,20 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
       this.userInfo = info;
     });
 
-    // Add a welcome message
-    const userName = this.userInfo?.name ? this.userInfo.name : 'there';
-    this.addMessage(`Hello ${userName}! How can I help you today?`, 'bot');
+    // Fetch welcome message from backend with empty request
+    this.isLoading = true;
+    this.chatService.sendMessage('').subscribe({
+      next: (response) => {
+        this.addMessage(response.response, 'bot');
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching welcome message:', error);
+        // Fallback to default message if backend fails
+        this.addMessage('Hello! How can I help you today?', 'bot');
+        this.isLoading = false;
+      }
+    });
   }
 
   ngAfterViewChecked(): void {
