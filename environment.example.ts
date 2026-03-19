@@ -14,6 +14,7 @@ export const environment = {
     authorizationUrl: 'https://oauth-provider.example.com/oauth/authorize',
     tokenUrl: 'https://oauth-provider.example.com/oauth/token',
     userInfoUrl: 'https://oauth-provider.example.com/oauth/userinfo',
+    logoutUrl: 'https://oauth-provider.example.com/oauth/logout', // Optional: for proper SSO logout
 
     // ============================================
     // Client Configuration
@@ -62,6 +63,7 @@ export const environment = {
      authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
      tokenUrl: 'https://oauth2.googleapis.com/token',
      userInfoUrl: 'https://www.googleapis.com/oauth2/v3/userinfo',
+     logoutUrl: '', // Google handles logout through browser session
      clientId: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
      clientSecret: '',
      redirectUri: 'http://localhost:4200/auth/callback',
@@ -77,6 +79,7 @@ export const environment = {
      authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
      tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
      userInfoUrl: 'https://graph.microsoft.com/v1.0/me',
+     logoutUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/logout',
      clientId: 'YOUR_AZURE_CLIENT_ID',
      clientSecret: '',
      redirectUri: 'http://localhost:4200/auth/callback',
@@ -92,6 +95,7 @@ export const environment = {
      authorizationUrl: 'https://YOUR_DOMAIN.auth0.com/authorize',
      tokenUrl: 'https://YOUR_DOMAIN.auth0.com/oauth/token',
      userInfoUrl: 'https://YOUR_DOMAIN.auth0.com/userinfo',
+     logoutUrl: 'https://YOUR_DOMAIN.auth0.com/v2/logout',
      clientId: 'YOUR_AUTH0_CLIENT_ID',
      clientSecret: '',
      redirectUri: 'http://localhost:4200/auth/callback',
@@ -107,6 +111,7 @@ export const environment = {
      authorizationUrl: 'https://YOUR_KEYCLOAK_DOMAIN/auth/realms/YOUR_REALM/protocol/openid-connect/auth',
      tokenUrl: 'https://YOUR_KEYCLOAK_DOMAIN/auth/realms/YOUR_REALM/protocol/openid-connect/token',
      userInfoUrl: 'https://YOUR_KEYCLOAK_DOMAIN/auth/realms/YOUR_REALM/protocol/openid-connect/userinfo',
+     logoutUrl: 'https://YOUR_KEYCLOAK_DOMAIN/auth/realms/YOUR_REALM/protocol/openid-connect/logout',
      clientId: 'YOUR_KEYCLOAK_CLIENT_ID',
      clientSecret: '',
      redirectUri: 'http://localhost:4200/auth/callback',

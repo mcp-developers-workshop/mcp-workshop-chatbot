@@ -15,6 +15,7 @@ export class AuthService {
   private tokenExpiryKey = 'token_expiry';
   private authStateKey = 'auth_state';
   private userInfoKey = 'user_info';
+  private forceLoginKey = 'force_login';
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidToken());
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
@@ -30,9 +31,15 @@ export class AuthService {
   /**
    * Initiate OAuth2 authorization code flow with PKCE
    */
-  login(): void {
+  login(forceLogin: boolean = false): void {
     const state = this.generateRandomString(32);
     const codeVerifier = environment.oauth.usePKCE ? this.generateRandomString(64) : undefined;
+
+    // Check if we need to force login (e.g., after logout)
+    const shouldForceLogin = forceLogin || sessionStorage.getItem(this.forceLoginKey) === 'true';
+    if (shouldForceLogin) {
+      sessionStorage.removeItem(this.forceLoginKey);
+    }
 
     // Store state and code verifier for verification after redirect
     const authState: AuthState = {
@@ -50,6 +57,11 @@ export class AuthService {
       scope: environment.oauth.scope,
       state: state
     };
+
+    // Force re-authentication by requiring login prompt
+    if (shouldForceLogin) {
+      params['prompt'] = 'login';
+    }
 
     // Add PKCE challenge if enabled
     if (codeVerifier) {
@@ -158,16 +170,32 @@ export class AuthService {
    * Logout user and clear tokens
    */
   logout(): void {
+    const accessToken = localStorage.getItem(this.accessTokenKey);
+
+    // Clear all local auth data
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.refreshTokenKey);
     localStorage.removeItem(this.tokenExpiryKey);
     localStorage.removeItem(this.userInfoKey);
     sessionStorage.removeItem(this.authStateKey);
 
+    // Set flag to force re-authentication on next login
+    sessionStorage.setItem(this.forceLoginKey, 'true');
+
     this.isAuthenticatedSubject.next(false);
     this.userInfoSubject.next(null);
 
-    this.router.navigate(['/login']);
+    // If logout endpoint is available, revoke the token
+    // Note: Keycloak supports end_session_endpoint for proper logout
+    if (accessToken && environment.oauth.logoutUrl) {
+      const logoutUrl = this.buildUrl(environment.oauth.logoutUrl, {
+        'post_logout_redirect_uri': window.location.origin + '/login',
+        'id_token_hint': accessToken
+      });
+      window.location.href = logoutUrl;
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   /**
