@@ -7,11 +7,9 @@ export interface Message {
 
 export interface ChatRequest {
   message: string;
-  conversationId?: string;
 }
 
 export interface ChatResponse {
   message: string;
-  conversationId: string;
   timestamp: string;
 }

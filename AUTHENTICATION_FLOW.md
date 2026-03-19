@@ -62,8 +62,7 @@ Headers:
   Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
 Body:
   {
-    "message": "Hello!",
-    "conversationId": "conv-123"
+    "message": "Hello!"
   }
 ```
 
@@ -97,7 +96,7 @@ All requests to `environment.apiUrl` automatically include the token:
 Authorization: Bearer <token>
 ```
 
-✅ **DELETE** `/api/chat/:conversationId` - Clear conversation
+✅ **DELETE** `/api/chat` - Clear conversation
 ```
 Authorization: Bearer <token>
 ```
@@ -214,7 +213,7 @@ curl -X POST http://localhost:3000/api/chat \
 ```typescript
 // In ChatService
 sendMessage(message: string): Observable<ChatResponse> {
-  const request = { message, conversationId: this.conversationId };
+  const request = { message };
   return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, request);
 }
 // No manual Authorization header needed!
@@ -227,7 +226,7 @@ Host: localhost:3000
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 
-{"message":"Hello","conversationId":"conv-123"}
+{"message":"Hello"}
 ```
 
 **Backend Receives:**

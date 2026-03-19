@@ -54,11 +54,6 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
     // Send message to backend
     this.chatService.sendMessage(userMessage).subscribe({
       next: (response) => {
-        // Store conversation ID for context
-        if (response.conversationId) {
-          this.chatService.setConversationId(response.conversationId);
-        }
-
         // Add bot response to chat
         this.addMessage(response.message, 'bot');
         this.isLoading = false;

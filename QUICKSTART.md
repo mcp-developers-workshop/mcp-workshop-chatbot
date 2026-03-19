@@ -105,17 +105,16 @@ app.use('/api', authenticateToken);
 
 // Chat endpoint
 app.post('/api/chat', (req, res) => {
-  const { message, conversationId } = req.body;
+  const { message } = req.body;
 
   res.json({
     message: `Echo: ${message}`,
-    conversationId: conversationId || `conv-${Date.now()}`,
     timestamp: new Date().toISOString()
   });
 });
 
 // Clear conversation endpoint
-app.delete('/api/chat/:conversationId', (req, res) => {
+app.delete('/api/chat', (req, res) => {
   res.json({ message: 'Conversation cleared' });
 });
 

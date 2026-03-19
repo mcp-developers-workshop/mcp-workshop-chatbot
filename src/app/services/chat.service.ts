@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment';
 })
 export class ChatService {
   private apiUrl = environment.apiUrl;
-  private conversationId?: string;
 
   constructor(private http: HttpClient) {}
 
@@ -21,8 +20,7 @@ export class ChatService {
    */
   sendMessage(message: string): Observable<ChatResponse> {
     const request: ChatRequest = {
-      message,
-      conversationId: this.conversationId
+      message
     };
 
     // HttpClient automatically sets Content-Type for JSON
@@ -31,33 +29,12 @@ export class ChatService {
   }
 
   /**
-   * Set the conversation ID for maintaining context
-   */
-  setConversationId(id: string): void {
-    this.conversationId = id;
-  }
-
-  /**
-   * Get the current conversation ID
-   */
-  getConversationId(): string | undefined {
-    return this.conversationId;
-  }
-
-  /**
    * Clear the conversation (optional endpoint)
-   * DELETE /api/chat/:conversationId
+   * DELETE /api/chat
    *
    * Note: Authorization header is automatically added by AuthInterceptor
    */
   clearConversation(): Observable<void> {
-    if (!this.conversationId) {
-      return new Observable(observer => {
-        observer.next();
-        observer.complete();
-      });
-    }
-
-    return this.http.delete<void>(`${this.apiUrl}/chat/${this.conversationId}`);
+    return this.http.delete<void>(`${this.apiUrl}/chat`);
   }
 }

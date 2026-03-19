@@ -116,7 +116,7 @@ All API requests include an OAuth2 Bearer token in the `Authorization` header. T
 
 ### Endpoints
 - `POST /api/chat` - Send messages and receive responses (authenticated)
-- `DELETE /api/chat/:conversationId` - Clear conversation (authenticated, optional)
+- `DELETE /api/chat` - Clear conversation (authenticated, optional)
 
 See `API.md` for complete API documentation with authentication examples.
 

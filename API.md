@@ -33,27 +33,23 @@ Authorization: Bearer <access_token>
 **Request Body:**
 ```json
 {
-  "message": "Hello, how are you?",
-  "conversationId": "optional-conversation-id"
+  "message": "Hello, how are you?"
 }
 ```
 
 **Request Fields:**
 - `message` (string, required): The user's message text
-- `conversationId` (string, optional): ID to maintain conversation context. If not provided, backend should create a new conversation.
 
 **Response:** `200 OK`
 ```json
 {
   "message": "I'm doing well, thank you! How can I help you today?",
-  "conversationId": "conv-12345-67890",
   "timestamp": "2026-03-17T10:30:00Z"
 }
 ```
 
 **Response Fields:**
 - `message` (string): The chatbot's response text
-- `conversationId` (string): Unique identifier for this conversation (should be consistent across messages in the same conversation)
 - `timestamp` (string): ISO 8601 timestamp of the response
 
 **Error Response:** `400 Bad Request`
@@ -82,27 +78,17 @@ Authorization: Bearer <access_token>
 ### 2. Clear Conversation (Optional)
 Clear the conversation history and context.
 
-**Endpoint:** `DELETE /api/chat/:conversationId`
+**Endpoint:** `DELETE /api/chat`
 
 **Request Headers:**
 ```
 Authorization: Bearer <access_token>
 ```
 
-**URL Parameters:**
-- `conversationId` (string, required): The ID of the conversation to clear
-
 **Response:** `200 OK`
 ```json
 {
   "message": "Conversation cleared successfully"
-}
-```
-
-**Error Response:** `404 Not Found`
-```json
-{
-  "error": "Conversation not found"
 }
 ```
 
@@ -156,18 +142,17 @@ app.use('/api', authenticateToken);
 
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message, conversationId } = req.body;
+    const { message } = req.body;
 
     if (!message || message.trim() === '') {
       return res.status(400).json({ error: 'Message is required' });
     }
 
     // Your chatbot logic here
-    const botResponse = await generateChatbotResponse(message, conversationId);
+    const botResponse = await generateChatbotResponse(message, req.user);
 
     res.json({
       message: botResponse.text,
-      conversationId: botResponse.conversationId || generateNewConversationId(),
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -176,12 +161,10 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-app.delete('/api/chat/:conversationId', async (req, res) => {
+app.delete('/api/chat', async (req, res) => {
   try {
-    const { conversationId } = req.params;
-
-    // Clear conversation logic
-    await clearConversationHistory(conversationId);
+    // Clear conversation logic for the authenticated user
+    await clearConversationHistory(req.user);
 
     res.json({ message: 'Conversation cleared successfully' });
   } catch (error) {
@@ -195,9 +178,9 @@ app.delete('/api/chat/:conversationId', async (req, res) => {
 
 ## Notes
 
-1. **Conversation State:** The backend should maintain conversation context using the `conversationId`. This allows for multi-turn conversations where the bot can reference previous messages.
+1. **Conversation State:** The backend should maintain conversation context using the authenticated user's identity (from the OAuth2 token). This allows for multi-turn conversations where the bot can reference previous messages.
 
-2. **Message History:** The backend may want to store message history for each conversation to provide context-aware responses.
+2. **Message History:** The backend may want to store message history per user to provide context-aware responses.
 
 3. **Rate Limiting:** Consider implementing rate limiting on the `/api/chat` endpoint to prevent abuse.
 
