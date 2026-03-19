@@ -8,6 +8,7 @@ yarn-error.log
 /tmp/
 /out-tsc/
 /bazel-out/
+.angular
 
 # IDEs
 .idea/
