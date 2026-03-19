@@ -12,6 +12,7 @@ import { TokenResponse, UserInfo, AuthState } from '../models/auth.model';
 export class AuthService {
   private accessTokenKey = 'access_token';
   private refreshTokenKey = 'refresh_token';
+  private idTokenKey = 'id_token';
   private tokenExpiryKey = 'token_expiry';
   private authStateKey = 'auth_state';
   private userInfoKey = 'user_info';
@@ -170,11 +171,12 @@ export class AuthService {
    * Logout user and clear tokens
    */
   logout(): void {
-    const accessToken = localStorage.getItem(this.accessTokenKey);
+    const idToken = localStorage.getItem(this.idTokenKey);
 
     // Clear all local auth data
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.refreshTokenKey);
+    localStorage.removeItem(this.idTokenKey);
     localStorage.removeItem(this.tokenExpiryKey);
     localStorage.removeItem(this.userInfoKey);
     sessionStorage.removeItem(this.authStateKey);
@@ -185,13 +187,19 @@ export class AuthService {
     this.isAuthenticatedSubject.next(false);
     this.userInfoSubject.next(null);
 
-    // If logout endpoint is available, revoke the token
-    // Note: Keycloak supports end_session_endpoint for proper logout
-    if (accessToken && environment.oauth.logoutUrl) {
-      const logoutUrl = this.buildUrl(environment.oauth.logoutUrl, {
-        'post_logout_redirect_uri': window.location.origin + '/login',
-        'id_token_hint': accessToken
-      });
+    // If logout endpoint is available, end the OAuth provider session
+    // Note: Keycloak supports end_session_endpoint for proper SSO logout
+    if (environment.oauth.logoutUrl) {
+      const params: Record<string, string> = {
+        'post_logout_redirect_uri': window.location.origin + '/login'
+      };
+
+      // Add id_token_hint if available (required by some providers like Keycloak)
+      if (idToken) {
+        params['id_token_hint'] = idToken;
+      }
+
+      const logoutUrl = this.buildUrl(environment.oauth.logoutUrl, params);
       window.location.href = logoutUrl;
     } else {
       this.router.navigate(['/login']);
@@ -286,6 +294,10 @@ export class AuthService {
 
     if (tokenResponse.refresh_token) {
       localStorage.setItem(this.refreshTokenKey, tokenResponse.refresh_token);
+    }
+
+    if (tokenResponse.id_token) {
+      localStorage.setItem(this.idTokenKey, tokenResponse.id_token);
     }
 
     const expiryTime = Date.now() + (tokenResponse.expires_in * 1000);
