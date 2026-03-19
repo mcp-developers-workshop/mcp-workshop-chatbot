@@ -115,6 +115,7 @@
   padding: 12px 16px;
   border-radius: 18px;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .user-message .message-content {
