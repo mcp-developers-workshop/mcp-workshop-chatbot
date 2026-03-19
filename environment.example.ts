@@ -21,7 +21,8 @@ export const environment = {
     // Client ID from your OAuth2 provider
     clientId: 'your-client-id-here',
 
-    // Client Secret - LEAVE EMPTY for PKCE flow (recommended for SPAs)
+    // Client Secret - MUST BE EMPTY for PKCE flow (recommended for SPAs)
+    // WARNING: Never commit client secrets to frontend code - they're exposed to users
     clientSecret: '',
 
     // ============================================
@@ -36,7 +37,8 @@ export const environment = {
     // Scopes to request (space-separated)
     scope: 'openid profile email',
 
-    // Response type (use 'code' for authorization code flow)
+    // Response type - MUST be 'code' for authorization code flow with PKCE
+    // Do NOT use 'token' (implicit flow) as it's less secure
     responseType: 'code',
 
     // ============================================
