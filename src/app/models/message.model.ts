@@ -6,10 +6,10 @@ export interface Message {
 }
 
 export interface ChatRequest {
-  message: string;
+  request: string;
 }
 
 export interface ChatResponse {
-  message: string;
+  response: string;
   timestamp: string;
 }

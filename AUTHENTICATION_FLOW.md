@@ -62,7 +62,7 @@ Headers:
   Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
 Body:
   {
-    "message": "Hello!"
+    "request": "Hello!"
   }
 ```
 
@@ -158,7 +158,7 @@ After logging in, copy the token from localStorage and test:
 curl -X POST http://localhost:3000/api/chat \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-  -d '{"message": "Hello"}'
+  -d '{"request": "Hello"}'
 ```
 
 ## Token Lifecycle
@@ -213,7 +213,7 @@ curl -X POST http://localhost:3000/api/chat \
 ```typescript
 // In ChatService
 sendMessage(message: string): Observable<ChatResponse> {
-  const request = { message };
+  const request = { request: message };
   return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, request);
 }
 // No manual Authorization header needed!
@@ -226,7 +226,7 @@ Host: localhost:3000
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 
-{"message":"Hello"}
+{"request":"Hello"}
 ```
 
 **Backend Receives:**

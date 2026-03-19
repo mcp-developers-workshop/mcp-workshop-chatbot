@@ -105,10 +105,10 @@ app.use('/api', authenticateToken);
 
 // Chat endpoint
 app.post('/api/chat', (req, res) => {
-  const { message } = req.body;
+  const { request } = req.body;
 
   res.json({
-    message: `Echo: ${message}`,
+    response: `Echo: ${request}`,
     timestamp: new Date().toISOString()
   });
 });

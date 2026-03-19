@@ -20,7 +20,7 @@ export class ChatService {
    */
   sendMessage(message: string): Observable<ChatResponse> {
     const request: ChatRequest = {
-      message
+      request: message
     };
 
     // HttpClient automatically sets Content-Type for JSON

@@ -55,7 +55,7 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
     this.chatService.sendMessage(userMessage).subscribe({
       next: (response) => {
         // Add bot response to chat
-        this.addMessage(response.message, 'bot');
+        this.addMessage(response.response, 'bot');
         this.isLoading = false;
       },
       error: (error) => {

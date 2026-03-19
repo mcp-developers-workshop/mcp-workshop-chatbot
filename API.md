@@ -33,29 +33,29 @@ Authorization: Bearer <access_token>
 **Request Body:**
 ```json
 {
-  "message": "Hello, how are you?"
+  "request": "Hello, how are you?"
 }
 ```
 
 **Request Fields:**
-- `message` (string, required): The user's message text
+- `request` (string, required): The user's message text
 
 **Response:** `200 OK`
 ```json
 {
-  "message": "I'm doing well, thank you! How can I help you today?",
+  "response": "I'm doing well, thank you! How can I help you today?",
   "timestamp": "2026-03-17T10:30:00Z"
 }
 ```
 
 **Response Fields:**
-- `message` (string): The chatbot's response text
+- `response` (string): The chatbot's response text
 - `timestamp` (string): ISO 8601 timestamp of the response
 
 **Error Response:** `400 Bad Request`
 ```json
 {
-  "error": "Message is required"
+  "error": "Request is required"
 }
 ```
 
@@ -142,22 +142,22 @@ app.use('/api', authenticateToken);
 
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message } = req.body;
+    const { request } = req.body;
 
-    if (!message || message.trim() === '') {
-      return res.status(400).json({ error: 'Message is required' });
+    if (!request || request.trim() === '') {
+      return res.status(400).json({ error: 'Request is required' });
     }
 
     // Your chatbot logic here
-    const botResponse = await generateChatbotResponse(message, req.user);
+    const botResponse = await generateChatbotResponse(request, req.user);
 
     res.json({
-      message: botResponse.text,
+      response: botResponse.text,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('Error processing message:', error);
-    res.status(500).json({ error: 'Internal server error processing message' });
+    console.error('Error processing request:', error);
+    res.status(500).json({ error: 'Internal server error processing request' });
   }
 });
 
