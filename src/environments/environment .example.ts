@@ -1,0 +1,25 @@
+export const environment = {
+  production: false,
+  apiUrl: 'https://globex-complaint-agent.apps.example.com/api/v1',
+  oauth: {
+    // OAuth2 Authorization Server endpoints
+    authorizationUrl: 'https://sso.apps.example.com/realms/globex/protocol/openid-connect/auth',
+    tokenUrl: 'https://sso.apps.example.com/realms/globex/protocol/openid-connect/token',
+    userInfoUrl: 'https://sso.apps.example.com/realms/globex/protocol/openid-connect/userinfo',
+    logoutUrl: 'https://sso.apps.example.com/realms/globex/protocol/openid-connect/logout',
+
+    // Client credentials (configured in OAuth2 provider)
+    clientId: 'globex-web-gateway',
+    clientSecret: 'xxxyyyzzz', 
+
+    // Application URLs
+    redirectUri: 'http://localhost:4200/auth/callback',
+
+    // OAuth2 flow parameters
+    scope: 'openid profile email',
+    responseType: 'code',
+
+    // PKCE (Proof Key for Code Exchange) - recommended for SPAs
+    usePKCE: false
+  }
+};
