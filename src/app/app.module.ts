@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { LoginComponent } from './login/login.component';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
+import { MarkdownPipe } from './pipes/markdown.pipe';
 
 import { ChatService } from './services/chat.service';
 import { AuthService } from './services/auth.service';
@@ -19,7 +20,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     AppComponent,
     ChatbotComponent,
     LoginComponent,
-    AuthCallbackComponent
+    AuthCallbackComponent,
+    MarkdownPipe
   ],
   imports: [
     BrowserModule,

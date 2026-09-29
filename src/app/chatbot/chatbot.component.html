@@ -21,9 +21,14 @@
       *ngFor="let message of messages"
       class="message"
       [ngClass]="{'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot'}">
-      <div class="message-content">
-        {{ message.content }}
+      <div
+        *ngIf="message.sender === 'bot'; else plainContent"
+        class="message-content markdown-body"
+        [innerHTML]="message.content | markdown">
       </div>
+      <ng-template #plainContent>
+        <div class="message-content">{{ message.content }}</div>
+      </ng-template>
       <div class="message-timestamp">
         {{ message.timestamp | date:'short' }}
       </div>
