@@ -20,6 +20,6 @@ export const environment = {
     responseType: 'code',
 
     // PKCE (Proof Key for Code Exchange) - recommended for SPAs
-    usePKCE: false
+    usePKCE: true
   }
 };
